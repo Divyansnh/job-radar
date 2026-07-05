@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Email preview</h2>
+    <p class="subtitle">{{ job.company }} — {{ job.title }}</p>
+  </div>
+  <div class="actions">
+    <a class="btn btn-outline" href="{{ url_for('job_detail', job_id=job.id) }}">Back to job</a>
+    <a class="btn btn-primary" href="{{ job.job_url }}" target="_blank" rel="noopener">Posting</a>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <div>
+    <div class="card">
+      <div class="card-header"><h3>Generated email</h3></div>
+      <div class="card-body padded">
+        <p><strong>Subject:</strong> {{ composed.subject }}</p>
+        <pre class="email-preview">{{ composed.body }}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-header"><h3>Composition</h3></div>
+      <div class="card-body padded">
+        <ul class="meta-list">
+          <li><span class="key">Persona</span><span>{{ composed.persona }}</span></li>
+          <li><span class="key">Archetype</span><span>{{ composed.archetype }}</span></li>
+          <li><span class="key">Structure</span><span>{{ composed.structure|join(' → ') }}</span></li>
+          <li><span class="key">Opener</span><span>{{ composed.opener_type }}</span></li>
+          <li><span class="key">Confidence</span><span>{{ composed.confidence.score }}%</span></li>
+          <li><span class="key">Fact-based</span><span>{{ (composed.confidence.fact_ratio * 100)|int }}%</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3>Signals</h3></div>
+      <div class="card-body padded">
+        <p class="muted" style="margin-top:0">Used</p>
+        <ul class="signal-list signal-used">
+          {% for s in composed.confidence.signals_used %}
+          <li>✓ {{ s }}</li>
+          {% endfor %}
+        </ul>
+        <p class="muted">Missing</p>
+        <ul class="signal-list signal-missing">
+          {% for s in composed.confidence.signals_missing %}
+          <li>✗ {{ s }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    {% if job.initial_email_sent_at %}
+    <div class="card">
+      <div class="card-header"><h3>Reply outcome</h3></div>
+      <div class="card-body padded">
+        <form method="post" action="{{ url_for('set_reply', job_id=job.id) }}">
+          <select name="outcome">
+            <option value="none" {{ 'selected' if (job.reply_outcome or 'none') == 'none' else '' }}>No reply yet</option>
+            <option value="replied" {{ 'selected' if job.reply_outcome == 'replied' else '' }}>Replied</option>
+            <option value="interview" {{ 'selected' if job.reply_outcome == 'interview' else '' }}>Interview</option>
+            <option value="offer" {{ 'selected' if job.reply_outcome == 'offer' else '' }}>Offer</option>
+          </select>
+          <button type="submit" class="btn btn-primary" style="margin-top:0.75rem">Save</button>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if learning.total_sent %}
+    <div class="card">
+      <div class="card-header"><h3>Learning ({{ learning.total_sent }} sent)</h3></div>
+      <div class="card-body padded">
+        {% if learning.by_persona %}
+        <p class="muted" style="margin-top:0">Reply rate by persona</p>
+        <ul class="meta-list compact">
+          {% for row in learning.by_persona %}
+          <li><span class="key">{{ row.key }}</span><span>{{ row.replied }}/{{ row.sent }} ({{ row.rate_pct }}%)</span></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

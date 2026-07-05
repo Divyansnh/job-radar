@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page_title }} — Job Radar</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Job Radar</h1>
+        <p>Application tracker</p>
+      </div>
+      <ul class="nav">
+        <li><a href="{{ url_for('dashboard') }}" class="{{ 'active' if active_nav == 'dashboard' else '' }}">Dashboard</a></li>
+        <li>
+          <a href="{{ url_for('jobs_page') }}" class="{{ 'active' if active_nav == 'jobs' else '' }}">
+            All Jobs
+            {% if nav_stats.total %}<span class="badge">{{ nav_stats.total }}</span>{% endif %}
+          </a>
+        </li>
+        <li><a href="{{ url_for('digest_page') }}" class="{{ 'active' if active_nav == 'digest' else '' }}">Daily Digest</a></li>
+        <li>
+          <a href="{{ url_for('applied_page') }}" class="{{ 'active' if active_nav == 'applied' else '' }}">
+            Applied
+            {% if nav_stats.applied %}<span class="badge">{{ nav_stats.applied }}</span>{% endif %}
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('outreach_page') }}" class="{{ 'active' if active_nav == 'outreach' else '' }}">
+            Outreach
+            {% if nav_stats.emailed %}<span class="badge">{{ nav_stats.emailed }}</span>{% endif %}
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        {{ nav_stats.queued }} in queue
+      </div>
+    </aside>
+    <main class="main">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

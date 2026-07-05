@@ -1,0 +1,84 @@
+# Tier 1: checked daily via public ATS APIs (no login required)
+# token = URL slug on greenhouse.io / lever.co / ashbyhq.com
+
+companies:
+  # --- Fintech / payments ---
+  - { name: Razorpay, track: python, ats: greenhouse, token: razorpay }
+  - { name: PhonePe, track: python, ats: ashby, token: phonepe }
+  - { name: Juspay, track: python, ats: ashby, token: juspay }
+  - { name: Setu, track: python, ats: ashby, token: setu }
+  - { name: Cred, track: python, ats: ashby, token: cred }
+  - { name: Slice, track: python, ats: ashby, token: slice }
+
+  # --- SaaS / dev tools ---
+  - { name: Postman, track: python, ats: greenhouse, token: postman }
+  - { name: Chargebee, track: python, ats: greenhouse, token: chargebee }
+  - { name: BrowserStack, track: python, ats: greenhouse, token: browserstack }
+  - { name: Freshworks, track: python, ats: lever, token: freshworks }
+  - { name: CleverTap, track: python, ats: greenhouse, token: clevertap }
+  - { name: LambdaTest, track: python, ats: lever, token: lambdatest }
+  - { name: Whatfix, track: python, ats: lever, token: whatfix }
+  - { name: Sprinto, track: python, ats: lever, token: sprinto }
+  - { name: Gushwork, track: python, ats: lever, token: gushwork }
+  - { name: Zeta, track: python, ats: ashby, token: zeta }
+
+  # --- E-commerce / consumer ---
+  - { name: Meesho, track: python, ats: ashby, token: meesho }
+  - { name: Swiggy, track: python, ats: lever, token: swiggy }
+  - { name: Dunzo, track: python, ats: lever, token: dunzo }
+
+  # --- Global / remote-friendly (India offices) ---
+  - { name: Glean, track: python, ats: greenhouse, token: gleanwork }
+  - { name: Deel, track: python, ats: ashby, token: deel }
+  - { name: Remote, track: python, ats: ashby, token: remote }
+  - { name: Energytec, track: python, ats: greenhouse, token: etec }
+
+  # --- More product companies ---
+  - { name: Rupeek, track: python, ats: lever, token: rupeek }
+  - { name: Niyo, track: python, ats: lever, token: niyo }
+  - { name: Open Financial, track: python, ats: ashby, token: open }
+  - { name: Smallcase, track: python, ats: lever, token: smallcase }
+  - { name: HackerRank, track: python, ats: greenhouse, token: hackerrank }
+  - { name: InterviewBit, track: python, ats: lever, token: interviewbit }
+  - { name: Innovaccer, track: python, ats: greenhouse, token: innovaccer }
+  - { name: Mindtickle, track: python, ats: greenhouse, token: mindtickle }
+  - { name: Darwinbox, track: python, ats: lever, token: darwinbox }
+  - { name: Uniphore, track: python, ats: greenhouse, token: uniphore }
+  - { name: Icertis, track: python, ats: greenhouse, token: icertis }
+  - { name: Highradius, track: python, ats: greenhouse, token: highradius }
+  - { name: MoEngage, track: python, ats: lever, token: moengage }
+  - { name: LeadSquared, track: python, ats: lever, token: leadsquared }
+  - { name: Hasura, track: python, ats: ashby, token: hasura }
+  - { name: Appsmith, track: python, ats: ashby, token: appsmith }
+  - { name: SigNoz, track: python, ats: ashby, token: signoz }
+  - { name: Atlan, track: python, ats: ashby, token: atlan }
+  - { name: Posthog, track: python, ats: ashby, token: posthog }
+  - { name: Mixpanel, track: python, ats: greenhouse, token: mixpanel }
+  - { name: Amplitude, track: python, ats: ashby, token: amplitude }
+  - { name: Razorpay X, track: python, ats: greenhouse, token: razorpay }
+
+  # --- Data / database / infra (strong profile fit) ---
+  - { name: MongoDB, track: both, ats: greenhouse, token: mongodb }
+  - { name: Databricks, track: both, ats: greenhouse, token: databricks }
+  - { name: Elastic, track: both, ats: greenhouse, token: elastic }
+  - { name: Confluent, track: both, ats: greenhouse, token: confluent }
+  - { name: Datadog, track: python, ats: greenhouse, token: datadog }
+  - { name: Nutanix, track: both, ats: greenhouse, token: nutanix }
+  - { name: Rubrik, track: both, ats: greenhouse, token: rubrik }
+  - { name: Cohesity, track: both, ats: greenhouse, token: cohesity }
+  - { name: Redis, track: both, ats: greenhouse, token: redis }
+  - { name: Snowflake, track: both, ats: greenhouse, token: snowflake }
+
+  # --- Hyderabad-heavy / India product ---
+  - { name: Zepto, track: python, ats: ashby, token: zepto }
+  - { name: Groww, track: python, ats: greenhouse, token: groww }
+  - { name: Dream11, track: python, ats: greenhouse, token: dream11 }
+  - { name: Ola, track: python, ats: lever, token: ola }
+  - { name: Zerodha, track: python, ats: lever, token: zerodha }
+  - { name: Flipkart, track: python, ats: greenhouse, token: flipkart }
+  - { name: Myntra, track: python, ats: greenhouse, token: myntra }
+  - { name: Udaan, track: python, ats: lever, token: udaan }
+  - { name: Licious, track: python, ats: lever, token: licious }
+  - { name: Cult.fit, track: python, ats: lever, token: curefit }
+
+  # --- SQL DBA: banks/IT services use Naukri/Hirist — see manual_search.yaml ---

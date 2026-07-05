@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_pill, track_pill, outreach_pill %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>{{ job.company }}</h2>
+    <p class="subtitle">{{ job.title }}</p>
+  </div>
+  <div class="actions">
+    <a class="btn btn-outline" href="{{ url_for('outreach_preview', job_id=job.id) }}">Preview email</a>
+    <a class="btn btn-primary" href="{{ job.job_url }}" target="_blank" rel="noopener">Apply on {{ job.source }}</a>
+    {% if job.status != 'applied' %}
+    <form method="post" action="{{ url_for('mark_applied', job_id=job.id) }}" style="display:inline">
+      <button type="submit" class="btn btn-success">Mark as applied</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+{% if request.args.get('added') %}
+<div class="info-banner">Added {{ request.args.get('added') }} contact(s).</div>
+{% endif %}
+{% if request.args.get('sent') %}
+<div class="info-banner">Sent outreach to {{ request.args.get('sent') }} contact(s).</div>
+{% endif %}
+
+<div class="detail-grid">
+  <div>
+    <div class="card">
+      <div class="card-header"><h3>Job description</h3></div>
+      <div class="card-body padded">
+        {% if job.description %}
+        <div class="description">{{ job.description }}</div>
+        {% else %}
+        <div class="empty">No description stored. Open the posting for full details.</div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if linkedin %}
+    <div class="card">
+      <div class="card-header"><h3>Find people on LinkedIn</h3></div>
+      <div class="card-body padded">
+        <p class="muted" style="margin-top:0">No verified email yet. Use these searches on LinkedIn People, then paste contacts below.</p>
+        <ol class="hint-steps">
+          {% for step in linkedin.steps %}
+          <li>{{ step }}</li>
+          {% endfor %}
+        </ol>
+        <div class="linkedin-searches">
+          {% for s in linkedin.searches %}
+          <div class="search-card">
+            <strong>{{ s.label }}</strong>
+            <div class="cell-sub">Keywords: <code>{{ s.keywords }}</code></div>
+            <div class="cell-sub">{{ s.why }}</div>
+            <a class="btn btn-outline" href="{{ s.url }}" target="_blank" rel="noopener">Open search</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-header"><h3>Add contacts you found</h3></div>
+      <div class="card-body padded">
+        <p class="muted" style="margin-top:0">One person per line:</p>
+        <pre class="format-hint">Name | email@company.com | https://linkedin.com/in/profile</pre>
+        <form method="post" action="{{ url_for('add_contacts', job_id=job.id) }}">
+          <textarea class="notes" name="contacts_text" placeholder="Priya Sharma | priya@acme.com | https://linkedin.com/in/priya&#10;recruiter@acme.com"></textarea>
+          <p style="margin-top:0.75rem">
+            <button type="submit" class="btn btn-primary">Save contacts</button>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3>Notes</h3></div>
+      <div class="card-body padded">
+        <form method="post" action="{{ url_for('save_notes', job_id=job.id) }}">
+          <textarea class="notes" name="notes" placeholder="Interview notes, etc.">{{ job.notes or '' }}</textarea>
+          <p style="margin-top:0.75rem"><button type="submit" class="btn btn-primary">Save notes</button></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-header"><h3>Details</h3></div>
+      <div class="card-body padded">
+        <ul class="meta-list">
+          <li><span class="key">Status</span>{{ status_pill(job.status) }}</li>
+          <li><span class="key">Track</span>{{ track_pill(job.track) }}</li>
+          <li><span class="key">Location</span><span>{{ job.location or 'Any' }}</span></li>
+          <li><span class="key">Score</span><span>{{ '%.1f'|format(job.score or 0) }}</span></li>
+          <li><span class="key">Source</span><span>{{ job.source }}</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3>Outreach</h3></div>
+      <div class="card-body padded">
+        <ul class="meta-list">
+          <li><span class="key">Email status</span>{{ outreach_pill(job.outreach_status or 'pending') }}</li>
+          {% if job.contact_email %}
+          <li><span class="key">Primary contact</span><span>{{ job.contact_email }}</span></li>
+          {% endif %}
+          {% if job.contact_source %}
+          <li><span class="key">Source</span><span>{{ job.contact_source }}</span></li>
+          {% elif resolve_source and resolve_source != 'none' %}
+          <li><span class="key">Resolved</span><span>{{ resolve_source }}</span></li>
+          {% endif %}
+        </ul>
+
+        {% if contacts %}
+        <h4 style="margin:1rem 0 0.5rem;font-size:0.9rem">Your contacts</h4>
+        <ul class="meta-list compact">
+          {% for c in contacts %}
+          <li>
+            <span class="key">{{ c.name or c.email }}</span>
+            <span>{{ c.email }}{% if c.outreach_status == 'sent' %} · sent{% endif %}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% set pending_c = contacts|selectattr('outreach_status', 'equalto', 'pending')|list|length %}
+        {% if pending_c %}
+        <form method="post" action="{{ url_for('send_contacts', job_id=job.id) }}" style="margin-top:1rem">
+          <button type="submit" class="btn btn-primary">Send to {{ pending_c }} pending contact(s)</button>
+        </form>
+        {% endif %}
+        {% endif %}
+
+        <p style="margin-top:1rem"><a class="btn btn-outline" href="{{ url_for('outreach_preview', job_id=job.id) }}">Preview email</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

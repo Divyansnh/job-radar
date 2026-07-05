@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% from "macros.html" import job_row %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Daily Digest</h2>
+    <p class="subtitle">{{ now.strftime('%A, %d %B %Y') }} — same view as output/digest.html</p>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi accent"><div class="label">Today's queue</div><div class="value">{{ queue|length }}</div></div>
+  <div class="kpi"><div class="label">All time</div><div class="value">{{ stats.total }}</div></div>
+  <div class="kpi success"><div class="label">Applied</div><div class="value">{{ stats.applied }}</div></div>
+  <div class="kpi"><div class="label">Emails sent</div><div class="value">{{ stats.emailed }}</div></div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    {% if queue %}
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Company</th><th>Role</th><th>Location</th><th>Track</th>
+            <th>Source</th><th>Score</th><th>Email</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in queue %}
+          {{ job_row(job, show_mark_applied=true) }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty">No jobs in today's queue.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,135 @@
+daily_job_limit: 10
+
+# Dashboard activity targets (ideal rates shown on charts)
+activity_targets:
+  applications_per_day: 10
+  applications_per_week: 50
+  working_days_per_week: 5
+
+max_age_days: 14
+min_score: 55
+max_acceptable_years: 2
+
+# Hyderabad first, then nearby major hubs, then rest of India / remote
+location_priority:
+  primary: Hyderabad
+  secondary:
+    - Bangalore
+    - Bengaluru
+    - Pune
+    - Chennai
+    - Mumbai
+    - Gurgaon
+    - Gurugram
+    - Noida
+    - Remote
+    - "Work from home"
+
+# Fast daily scrape: home city first, then India-wide fallback
+search_locations:
+  - Hyderabad
+  - India
+
+# Tier 2 portals — each scraped separately (one failure won't block others)
+portals:
+  - linkedin
+  - google
+
+# Best-effort portals (slow or may block bots — won't stop the run)
+optional_portals:
+  - naukri
+  - indeed
+  - glassdoor
+
+portal_results_per_search: 15
+
+search_terms:
+  sql_dba:
+    - "junior database engineer"
+    - "postgresql developer hyderabad"
+    - "junior sql dba"
+    - "database migration engineer"
+  python:
+    - "junior python developer hyderabad"
+    - "python backend postgresql"
+    - "associate python developer"
+    - "data analyst python sql"
+
+title_exclude:
+  - senior
+  - lead
+  - principal
+  - architect
+  - staff
+  - director
+  - manager
+  - "head of"
+  - java
+  - ".net"
+  - dotnet
+  - "c#"
+
+# Daily queue: database roles first (matches TR intern profile)
+track_priority:
+  - sql_dba
+  - python
+
+track_priority_boost:
+  sql_dba: 8
+  python: 0
+
+queue_slots:
+  sql_dba: 6
+  python: 4
+
+skills:
+  python:
+    - python
+    - flask
+    - fastapi
+    - rest
+    - api
+    - postgresql
+    - sql
+    - aws
+    - lambda
+    - git
+  sql_dba:
+    - postgresql
+    - sql
+    - t-sql
+    - plpgsql
+    - "sql server"
+    - stored procedure
+    - migration
+    - etl
+    - aurora
+    - backup
+    - restore
+    - indexing
+    - replication
+    - informatica
+    - aws
+    - lambda
+
+followup_days:
+  - 3
+  - 7
+  - 12
+
+# Outreach — curiosity-first engine (not static templates)
+outreach:
+  personalization_level: 1   # 0=minimal … 3=deepest JD signals (see outreach_engine.py)
+  attach_resume_decision_maker: true
+  attach_resume_recruiter: true
+  allow_guess: false          # never auto-send careers@slug.com — use LinkedIn + manual contacts
+  seed: null                  # set integer for deterministic copy in tests
+
+browser_scraping:
+  enabled: false   # set true on personal PC after save_browser_session.py
+  headless: true
+  delay_seconds: 2
+
+resume_paths:
+  python: assets/resume_python_junior.pdf
+  sql_dba: assets/resume_sql_dba_junior.pdf

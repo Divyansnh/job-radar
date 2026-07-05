@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% from "macros.html" import status_pill, track_pill, outreach_pill %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>All Jobs</h2>
+    <p class="subtitle">Browse and filter your full job tracker</p>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('digest_page') }}">Today's digest</a>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi accent">
+    <div class="label">Showing</div>
+    <div class="value">{{ page_stats.showing }}<span class="kpi-target">/{{ page_stats.total }}</span></div>
+    <div class="kpi-sub">matching filters</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Today's digest</div>
+    <div class="value">{{ page_stats.today_digest }}<span class="kpi-target">/{{ page_stats.daily_limit }}</span></div>
+    <div class="kpi-sub">apply first</div>
+  </div>
+  <div class="kpi">
+    <div class="label">In queue</div>
+    <div class="value">{{ page_stats.queued }}</div>
+    <div class="kpi-sub">waiting to apply</div>
+  </div>
+  <div class="kpi success">
+    <div class="label">Applied</div>
+    <div class="value">{{ page_stats.applied }}</div>
+    <div class="kpi-sub">all time</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Emails sent</div>
+    <div class="value">{{ page_stats.emailed }}</div>
+    <div class="kpi-sub">outreach done</div>
+  </div>
+  <div class="kpi warning">
+    <div class="label">Follow-ups due</div>
+    <div class="value">{{ page_stats.followups_due }}</div>
+    <div class="kpi-sub">need action</div>
+  </div>
+</div>
+
+<div class="kpi-grid kpi-grid-secondary">
+  <div class="kpi">
+    <div class="label">DBA / Python</div>
+    <div class="value">{{ page_stats.sql_dba }} / {{ page_stats.python }}</div>
+    <div class="kpi-sub">by track</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Avg score</div>
+    <div class="value">{{ '%.1f'|format(page_stats.avg_score) }}</div>
+    <div class="kpi-sub">in current view</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Pending outreach</div>
+    <div class="value">{{ page_stats.pending_outreach }}</div>
+    <div class="kpi-sub">no email yet</div>
+  </div>
+</div>
+
+<form class="filters" method="get" action="{{ url_for('jobs_page') }}">
+  <input type="search" name="q" value="{{ filters.q or '' }}" placeholder="Search company, role, location…">
+  <select name="status">
+    <option value="">All statuses</option>
+    <option value="queued" {{ 'selected' if filters.status == 'queued' else '' }}>Queued</option>
+    <option value="applied" {{ 'selected' if filters.status == 'applied' else '' }}>Applied</option>
+  </select>
+  <select name="track">
+    <option value="">All tracks</option>
+    <option value="sql_dba" {{ 'selected' if filters.track == 'sql_dba' else '' }}>SQL / DBA</option>
+    <option value="python" {{ 'selected' if filters.track == 'python' else '' }}>Python</option>
+  </select>
+  <select name="sort">
+    <option value="score_desc" {{ 'selected' if filters.sort == 'score_desc' else '' }}>Score (high)</option>
+    <option value="discovered_desc" {{ 'selected' if filters.sort == 'discovered_desc' else '' }}>Recently found</option>
+    <option value="company_asc" {{ 'selected' if filters.sort == 'company_asc' else '' }}>Company A–Z</option>
+  </select>
+  <button type="submit" class="btn btn-primary">Filter</button>
+  <a class="btn btn-outline" href="{{ url_for('jobs_page') }}">Clear</a>
+</form>
+
+<div class="card">
+  <div class="card-body">
+    {% if jobs %}
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Company</th><th>Role</th><th>Location</th><th>Track</th>
+            <th>Status</th><th>Email</th><th>Score</th><th>Found</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in jobs %}
+          <tr>
+            <td><a href="{{ url_for('job_detail', job_id=job.id) }}"><strong>{{ job.company }}</strong></a></td>
+            <td>{{ job.title }}</td>
+            <td>{{ job.location or 'Any' }}</td>
+            <td>{{ track_pill(job.track) }}</td>
+            <td>{{ status_pill(job.status) }}</td>
+            <td>{{ outreach_pill(job.outreach_status or 'pending') }}</td>
+            <td>{{ '%.1f'|format(job.score or 0) }}</td>
+            <td>{{ job.discovered_at|fmt_date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty">No jobs match your filters.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

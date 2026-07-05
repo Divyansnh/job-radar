@@ -1,0 +1,112 @@
+# Copy to config.yaml
+
+daily_job_limit: 10
+max_age_days: 14
+min_score: 55
+max_acceptable_years: 2
+
+location_priority:
+  primary: Hyderabad
+  secondary:
+    - Bangalore
+    - Bengaluru
+    - Pune
+    - Chennai
+    - Mumbai
+    - Gurgaon
+    - Noida
+    - Remote
+
+search_locations:
+  - Hyderabad
+  - Bangalore
+  - Pune
+  - India
+
+search_terms:
+  sql_dba:
+    - "junior database engineer"
+    - "junior sql dba"
+    - "postgresql developer"
+    - "database migration engineer"
+    - "associate database administrator"
+  python:
+    - "junior python developer"
+    - "python backend developer postgresql"
+    - "associate python developer"
+    - "data analyst python sql"
+
+title_exclude:
+  - senior
+  - lead
+  - principal
+  - architect
+  - staff
+  - director
+  - manager
+  - java
+  - ".net"
+  - dotnet
+  - "c#"
+
+track_priority:
+  - sql_dba
+  - python
+
+track_priority_boost:
+  sql_dba: 8
+  python: 0
+
+queue_slots:
+  sql_dba: 6
+  python: 4
+
+skills:
+  python:
+    - python
+    - flask
+    - fastapi
+    - rest
+    - postgresql
+    - sql
+    - aws
+    - git
+  sql_dba:
+    - postgresql
+    - sql
+    - t-sql
+    - plpgsql
+    - "sql server"
+    - stored procedure
+    - migration
+    - etl
+    - aurora
+    - backup
+    - indexing
+    - replication
+    - informatica
+    - aws
+
+followup_days:
+  - 3
+  - 7
+  - 12
+
+outreach:
+  personalization_level: 1
+  attach_resume_decision_maker: true
+  attach_resume_recruiter: true
+  seed: null
+
+portals:
+  - linkedin
+  - google
+
+optional_portals:
+  - naukri
+  - indeed
+  - glassdoor
+
+resume_paths:
+  python: assets/resume_python_junior.pdf
+  sql_dba: assets/resume_sql_dba_junior.pdf

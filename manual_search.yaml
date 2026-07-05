@@ -1,0 +1,86 @@
+# Portals and employers Job Radar cannot scrape automatically.
+# Check these yourself 2–3× per week (Hyderabad + database/python searches).
+
+portals:
+  - name: Naukri
+    url: https://www.naukri.com
+    why: Largest India job board; bot often blocked — use logged-in browser
+    searches:
+      - junior database administrator hyderabad
+      - postgresql developer hyderabad
+      - sql dba hyderabad
+      - database engineer hyderabad
+      - junior python developer hyderabad
+
+  - name: Hirist
+    url: https://www.hirist.com
+    why: Strong for tech startups; no API in Job Radar
+    searches:
+      - database hyderabad
+      - python backend hyderabad
+      - sql developer
+
+  - name: Instahyre
+    url: https://www.instahyre.com
+    why: Curated tech roles; profile-based matching
+    note: Complete profile emphasizing PostgreSQL, AWS, Thomson Reuters intern
+
+  - name: CutShort
+    url: https://cutshort.io
+    why: Startup-focused; good for backend/DB roles
+
+  - name: LinkedIn Jobs
+    url: https://www.linkedin.com/jobs
+    why: Already scraped by Job Radar — also apply via Easy Apply here
+
+  - name: Indeed India
+    url: https://in.indeed.com
+    why: Also scraped by Job Radar (optional) — worth a direct browse too
+
+employers_manual_only:
+  # Large Hyderabad employers — own career sites, not on Greenhouse/Lever/Ashby
+  - name: TCS
+    url: https://www.tcs.com/careers
+    roles: SQL DBA, database support, ETL
+  - name: Infosys
+    url: https://www.infosys.com/careers
+    roles: PostgreSQL, Python ETL, database engineer
+  - name: Wipro
+    url: https://careers.wipro.com
+    roles: DBA, SQL developer
+  - name: HCLTech
+    url: https://www.hcltech.com/careers
+    roles: SQL DBA, database admin
+  - name: Cognizant
+    url: https://careers.cognizant.com
+    roles: SQL/ETL, database roles
+  - name: Accenture
+    url: https://www.accenture.com/in-en/careers
+    roles: Data engineer, SQL, cloud database
+  - name: Capgemini
+    url: https://www.capgemini.com/careers
+    roles: DBA, SQL developer
+  - name: Deloitte
+    url: https://www2.deloitte.com/in/en/careers
+    roles: Data engineer, SQL
+  - name: Amazon
+    url: https://www.amazon.jobs/en/search?base_query=database&loc_query=Hyderabad
+    roles: Database engineer (you already got one via LinkedIn)
+  - name: Microsoft
+    url: https://careers.microsoft.com
+    roles: SQL, Azure data roles — Hyderabad IDC
+  - name: Oracle
+    url: https://careers.oracle.com
+    roles: Database engineer, DBA — ironic fit for your migration skills
+  - name: Google
+    url: https://careers.google.com
+    roles: Software engineer, data — Hyderabad office
+
+  - name: Thomson Reuters
+    url: https://careers.thomsonreuters.com
+    note: Your current employer — watch for full-time conversion roles
+
+tips:
+  - IT services (TCS, Infosys, Wipro) hire many DBAs in Hyderabad — manual apply weekly
+  - Banks (HDFC, ICICI, SBI) post DBA roles on Naukri, rarely on startup ATS
+  - Use "Hyderabad" + "PostgreSQL" or "SQL DBA" on Naukri/Hirist for best matches

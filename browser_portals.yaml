@@ -1,0 +1,39 @@
+# Playwright browser scrapers — requires logged-in session (see scripts/save_browser_session.py)
+# Selectors may need updates if a site changes its HTML.
+
+portals:
+  naukri:
+    login_url: https://www.naukri.com/nlogin/login
+    state_file: secrets/naukri_state.json
+    searches:
+      - track: sql_dba
+        url: https://www.naukri.com/junior-database-administrator-jobs-in-hyderabad
+      - track: sql_dba
+        url: https://www.naukri.com/postgresql-developer-jobs-in-hyderabad
+      - track: sql_dba
+        url: https://www.naukri.com/sql-dba-jobs-in-hyderabad
+      - track: python
+        url: https://www.naukri.com/junior-python-developer-jobs-in-hyderabad
+    selectors:
+      job_card: "div.srp-jobtuple-wrapper, article.jobTuple"
+      title: "a.title, a.jtitle"
+      company: "a.comp-name, .comp-name, .companyInfo"
+      location: ".locWdth, .location, span.locWdth"
+      description: ".job-desc, .job-description"
+
+  hirist:
+    login_url: https://www.hirist.com/login
+    state_file: secrets/hirist_state.json
+    searches:
+      - track: sql_dba
+        url: https://www.hirist.com/j/database-administrator-jobs-in-hyderabad
+      - track: sql_dba
+        url: https://www.hirist.com/j/postgresql-developer-jobs-in-hyderabad
+      - track: python
+        url: https://www.hirist.com/j/python-developer-jobs-in-hyderabad
+    selectors:
+      job_card: "div[class*='job'], article[class*='job'], li[class*='job']"
+      title: "a[href*='/j/'], h3 a, .job-title a"
+      company: ".company, .company-name, [class*='company']"
+      location: ".location, [class*='location']"
+      description: ""

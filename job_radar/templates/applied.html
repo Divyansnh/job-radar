@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% from "macros.html" import track_pill, outreach_pill %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Applied</h2>
+    <p class="subtitle">Applications you've submitted and their outreach status</p>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('digest_page') }}">Apply more today</a>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi success">
+    <div class="label">Total applied</div>
+    <div class="value">{{ page_stats.total }}</div>
+    <div class="kpi-sub">all time</div>
+  </div>
+  <div class="kpi accent">
+    <div class="label">With email</div>
+    <div class="value">{{ page_stats.emailed }}</div>
+    <div class="kpi-sub">outreach sent</div>
+  </div>
+  <div class="kpi warning">
+    <div class="label">No email yet</div>
+    <div class="value">{{ page_stats.no_email }}</div>
+    <div class="kpi-sub"><a href="{{ url_for('outreach_page', view='applied_gap') }}">View gap →</a></div>
+  </div>
+  <div class="kpi">
+    <div class="label">DBA / Python</div>
+    <div class="value">{{ page_stats.sql_dba }} / {{ page_stats.python }}</div>
+    <div class="kpi-sub">by track</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Avg score</div>
+    <div class="value">{{ '%.1f'|format(page_stats.avg_score) }}</div>
+    <div class="kpi-sub">of applied roles</div>
+  </div>
+  <div class="kpi">
+    <div class="label">With notes</div>
+    <div class="value">{{ page_stats.with_notes }}</div>
+    <div class="kpi-sub">interview / recruiter notes</div>
+  </div>
+</div>
+
+<form class="filters" method="get" action="{{ url_for('applied_page') }}">
+  <input type="search" name="q" value="{{ filters.q or '' }}" placeholder="Search company, role, location…">
+  <select name="track">
+    <option value="">All tracks</option>
+    <option value="sql_dba" {{ 'selected' if filters.track == 'sql_dba' else '' }}>SQL / DBA</option>
+    <option value="python" {{ 'selected' if filters.track == 'python' else '' }}>Python</option>
+  </select>
+  <select name="outreach">
+    <option value="">All outreach</option>
+    <option value="pending" {{ 'selected' if filters.outreach == 'pending' else '' }}>No email yet</option>
+    <option value="sent" {{ 'selected' if filters.outreach == 'sent' else '' }}>Email sent</option>
+    <option value="complete" {{ 'selected' if filters.outreach == 'complete' else '' }}>Follow-up complete</option>
+  </select>
+  <select name="sort">
+    <option value="applied_desc" {{ 'selected' if filters.sort == 'applied_desc' else '' }}>Recently applied</option>
+    <option value="score_desc" {{ 'selected' if filters.sort == 'score_desc' else '' }}>Highest score</option>
+    <option value="company_asc" {{ 'selected' if filters.sort == 'company_asc' else '' }}>Company A–Z</option>
+  </select>
+  <button type="submit" class="btn btn-primary">Filter</button>
+  <a class="btn btn-outline" href="{{ url_for('applied_page') }}">Clear</a>
+</form>
+
+<div class="card">
+  <div class="card-header">
+    <h3>Applications</h3>
+    <span class="chart-legend-note">{{ page_stats.showing }} of {{ page_stats.total }}</span>
+  </div>
+  <div class="card-body">
+    {% if jobs %}
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Role</th>
+            <th>Location</th>
+            <th>Track</th>
+            <th>Applied</th>
+            <th>Outreach</th>
+            <th>Score</th>
+            <th>Notes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in jobs %}
+          <tr>
+            <td><a href="{{ url_for('job_detail', job_id=job.id) }}"><strong>{{ job.company }}</strong></a></td>
+            <td>{{ job.title }}</td>
+            <td>{{ job.location or 'Any' }}</td>
+            <td>{{ track_pill(job.track) }}</td>
+            <td>
+              <div>{{ job.applied_at|fmt_date }}</div>
+              <div class="cell-sub">{{ job.applied_at|days_ago }}</div>
+            </td>
+            <td>{{ outreach_pill(job.outreach_status or 'pending') }}</td>
+            <td>{{ '%.1f'|format(job.score or 0) }}</td>
+            <td>
+              {% if job.notes %}
+              <span class="pill pill-sent" title="{{ job.notes[:80] }}">Yes</span>
+              {% else %}
+              <span class="pill pill-pending">—</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="actions">
+                <a class="btn btn-outline" href="{{ url_for('job_detail', job_id=job.id) }}">Details</a>
+                <a class="btn btn-primary" href="{{ job.job_url }}" target="_blank" rel="noopener">Posting</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty">
+      {% if page_stats.total == 0 %}
+      No applications yet. Mark jobs as applied from <a href="{{ url_for('digest_page') }}">Daily Digest</a> or a job detail page.
+      {% else %}
+      No applications match your filters.
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

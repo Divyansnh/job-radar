@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Activity Dashboard</h2>
+    <p class="subtitle">{{ now.strftime('%A, %d %B %Y') }} — your pace vs ideal targets from config.yaml</p>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi accent">
+    <div class="label">Today</div>
+    <div class="value">{{ report.applied_today }}<span class="kpi-target">/{{ report.targets.applications_per_day }}</span></div>
+    <div class="kpi-sub">applications</div>
+  </div>
+  <div class="kpi">
+    <div class="label">This week</div>
+    <div class="value">{{ report.applied_week }}<span class="kpi-target">/{{ report.targets.applications_per_week }}</span></div>
+    <div class="kpi-sub">applications</div>
+  </div>
+  <div class="kpi success">
+    <div class="label">Emails this week</div>
+    <div class="value">{{ report.emailed_week }}</div>
+    <div class="kpi-sub">outreach sent</div>
+  </div>
+  <div class="kpi warning">
+    <div class="label">Follow-ups due</div>
+    <div class="value">{{ report.followups_due }}</div>
+    <div class="kpi-sub">need action</div>
+  </div>
+</div>
+
+{% if report.alerts %}
+<div class="alerts">
+  {% for alert in report.alerts %}
+  <div class="alert alert-{{ alert.level }}">
+  {% if alert.link == 'digest' %}
+    <a href="{{ url_for('digest_page') }}">{{ alert.text }}</a>
+  {% elif alert.link == 'jobs' %}
+    <a href="{{ url_for('jobs_page') }}">{{ alert.text }}</a>
+  {% elif alert.link == 'outreach' %}
+    <a href="{{ url_for('outreach_page') }}">{{ alert.text }}</a>
+  {% else %}
+    {{ alert.text }}
+  {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="chart-grid">
+  <div class="card chart-card chart-wide">
+    <div class="card-header">
+      <h3>Daily application pace</h3>
+      <span class="chart-legend-note">Bars = actual · Line = ideal ({{ report.targets.applications_per_day }}/day)</span>
+    </div>
+    <div class="card-body padded">
+      <canvas id="paceChart" height="100"></canvas>
+    </div>
+  </div>
+
+  <div class="card chart-card">
+    <div class="card-header">
+      <h3>Activity rates vs ideal</h3>
+      <span class="chart-legend-note">% of target reached</span>
+    </div>
+    <div class="card-body padded">
+      <canvas id="ratesChart" height="200"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="chart-grid">
+  <div class="card chart-card">
+    <div class="card-header"><h3>Pipeline funnel</h3></div>
+    <div class="card-body padded">
+      <canvas id="funnelChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <div class="card chart-card">
+    <div class="card-header"><h3>Track mix (queued vs applied)</h3></div>
+    <div class="card-body padded">
+      <canvas id="trackChart" height="200"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><h3>Rate breakdown</h3></div>
+  <div class="card-body padded">
+    <div class="rate-bars">
+      {% for rate in report.activity_rates %}
+      <div class="rate-row rate-{{ rate.importance }}">
+        <div class="rate-head">
+          <span class="rate-label">
+            {% if rate.importance == 'critical' %}<strong>{{ rate.label }}</strong>{% else %}{{ rate.label }}{% endif %}
+          </span>
+          <span class="rate-nums">{{ rate.actual }} / {{ rate.ideal }} ({{ rate.pct }}%)</span>
+        </div>
+        <div class="rate-track">
+          <div class="rate-fill" style="width: {{ rate.pct }}%"></div>
+          <div class="rate-ideal-marker" title="100% target"></div>
+        </div>
+        <div class="rate-hint">{{ rate.hint }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const chartDays = {{ report.chart_days | tojson }};
+const chartApplied = {{ report.chart_applied | tojson }};
+const chartIdeal = {{ report.chart_ideal | tojson }};
+const activityRates = {{ report.activity_rates | tojson }};
+const funnel = {{ report.funnel | tojson }};
+const trackMix = {{ report.track_mix | tojson }};
+
+const gridColor = '#e2e8f0';
+const fontFamily = "'Segoe UI', system-ui, sans-serif";
+
+Chart.defaults.font.family = fontFamily;
+Chart.defaults.color = '#64748b';
+
+new Chart(document.getElementById('paceChart'), {
+  type: 'bar',
+  data: {
+    labels: chartDays,
+    datasets: [
+      {
+        label: 'Applications',
+        data: chartApplied,
+        backgroundColor: 'rgba(37, 99, 235, 0.75)',
+        borderRadius: 4,
+      },
+      {
+        label: 'Ideal / day',
+        data: chartIdeal,
+        type: 'line',
+        borderColor: '#059669',
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: gridColor } },
+      x: { grid: { display: false } },
+    },
+  },
+});
+
+const criticalRates = activityRates.filter(r => r.importance === 'critical' || r.importance === 'high');
+new Chart(document.getElementById('ratesChart'), {
+  type: 'bar',
+  data: {
+    labels: criticalRates.map(r => r.label),
+    datasets: [
+      {
+        label: 'Your rate %',
+        data: criticalRates.map(r => r.pct),
+        backgroundColor: criticalRates.map(r =>
+          r.importance === 'critical' ? 'rgba(37, 99, 235, 0.8)' : 'rgba(14, 116, 144, 0.75)'
+        ),
+        borderRadius: 4,
+      },
+      {
+        label: 'Ideal (100%)',
+        data: criticalRates.map(() => 100),
+        type: 'line',
+        borderColor: '#059669',
+        borderDash: [4, 4],
+        pointRadius: 0,
+        fill: false,
+      },
+    ],
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      x: { max: 100, ticks: { callback: v => v + '%' }, grid: { color: gridColor } },
+      y: { grid: { display: false } },
+    },
+  },
+});
+
+new Chart(document.getElementById('funnelChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Tracked', 'In queue', 'Applied', 'Emailed', 'Follow-ups done'],
+    datasets: [{
+      data: [funnel.tracked, funnel.queued, funnel.applied, funnel.emailed, funnel.followup_complete],
+      backgroundColor: [
+        'rgba(100, 116, 139, 0.7)',
+        'rgba(37, 99, 235, 0.75)',
+        'rgba(5, 150, 105, 0.75)',
+        'rgba(14, 116, 144, 0.75)',
+        'rgba(217, 119, 6, 0.75)',
+      ],
+      borderRadius: 4,
+    }],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: gridColor } },
+      x: { grid: { display: false } },
+    },
+  },
+});
+
+new Chart(document.getElementById('trackChart'), {
+  type: 'bar',
+  data: {
+    labels: ['SQL / DBA', 'Python'],
+    datasets: [
+      {
+        label: 'Queued',
+        data: [trackMix.sql_dba.queued, trackMix.python.queued],
+        backgroundColor: 'rgba(37, 99, 235, 0.65)',
+        borderRadius: 4,
+      },
+      {
+        label: 'Applied',
+        data: [trackMix.sql_dba.applied, trackMix.python.applied],
+        backgroundColor: 'rgba(5, 150, 105, 0.75)',
+        borderRadius: 4,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: gridColor } },
+      x: { grid: { display: false } },
+    },
+  },
+});
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% set status_labels = {
+  'new': 'New',
+  'queued': 'Queued',
+  'applied': 'Applied',
+} %}
+{% set outreach_labels = {
+  'pending': 'Pending',
+  'sent': 'Email sent',
+  'followup_1': 'Follow-up 1',
+  'followup_2': 'Follow-up 2',
+  'followup_complete': 'Complete',
+  'needs_contacts': 'Find on LinkedIn',
+} %}
+
+{% macro status_pill(status) %}
+<span class="pill pill-{{ status }}">{{ status_labels.get(status, status) }}</span>
+{% endmacro %}
+
+{% macro track_pill(track) %}
+<span class="pill pill-{{ track }}">{{ 'SQL / DBA' if track == 'sql_dba' else track|title }}</span>
+{% endmacro %}
+
+{% macro outreach_pill(status) %}
+{% set cls = 'pending' if status == 'pending' else ('needs' if status == 'needs_contacts' else ('sent' if status == 'sent' else 'followup')) %}
+<span class="pill pill-{{ cls }}">{{ outreach_labels.get(status, status) }}</span>
+{% endmacro %}
+
+{% macro job_row(job, show_apply=true, show_mark_applied=false) %}
+<tr>
+  <td><a href="{{ url_for('job_detail', job_id=job.id) }}"><strong>{{ job.company }}</strong></a></td>
+  <td>{{ job.title }}</td>
+  <td>{{ job.location or 'Any' }}</td>
+  <td>{{ track_pill(job.track) }}</td>
+  <td>{{ job.source }}</td>
+  <td>{{ '%.1f'|format(job.score or 0) }}</td>
+  <td>{{ outreach_pill(job.outreach_status or 'pending') }}</td>
+  <td>
+    <div class="actions">
+      {% if show_apply %}
+      <a class="btn btn-primary" href="{{ job.job_url }}" target="_blank" rel="noopener">Apply</a>
+      {% endif %}
+      {% if show_mark_applied and job.status != 'applied' %}
+      <form method="post" action="{{ url_for('mark_applied', job_id=job.id) }}" style="display:inline">
+        <button type="submit" class="btn btn-outline">Mark applied</button>
+      </form>
+      {% endif %}
+    </div>
+  </td>
+</tr>
+{% endmacro %}

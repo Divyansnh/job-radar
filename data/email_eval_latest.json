@@ -1,0 +1,381 @@
+{
+  "summary": {
+    "jobs_evaluated": 8,
+    "with_any_email": 8,
+    "best_source_counts": {
+      "guess": 7,
+      "jd": 1
+    },
+    "hunter_credits_used": 0
+  },
+  "jobs": [
+    {
+      "job_id": 1,
+      "company": "IntraEdge",
+      "title": "Database Administrator",
+      "score": 118.6,
+      "job_url": "https://www.linkedin.com/jobs/view/4432954777",
+      "stored_email": null,
+      "best": {
+        "tier": "guess",
+        "email": "careers@intraedge.com",
+        "detail": "careers@slug.com (current fallback)",
+        "used_api_credit": false
+      },
+      "tiers": [
+        {
+          "tier": "stored",
+          "email": null,
+          "detail": "empty",
+          "used_api_credit": false
+        },
+        {
+          "tier": "jd",
+          "email": null,
+          "detail": "no @ in description",
+          "used_api_credit": false
+        },
+        {
+          "tier": "scrape",
+          "email": null,
+          "detail": "tried 24 URLs, 0 emails",
+          "used_api_credit": false
+        },
+        {
+          "tier": "hunter",
+          "email": null,
+          "detail": "skip (no HUNTER_API_KEY)",
+          "used_api_credit": false
+        },
+        {
+          "tier": "guess",
+          "email": "careers@intraedge.com",
+          "detail": "careers@slug.com (current fallback)",
+          "used_api_credit": false
+        }
+      ]
+    },
+    {
+      "job_id": 2,
+      "company": "PwC Acceleration Center India",
+      "title": "Data Engineer",
+      "score": 117.4,
+      "job_url": "https://www.linkedin.com/jobs/view/4433655371",
+      "stored_email": null,
+      "best": {
+        "tier": "guess",
+        "email": "careers@pwcaccelerationcenterindia.com",
+        "detail": "careers@slug.com (current fallback)",
+        "used_api_credit": false
+      },
+      "tiers": [
+        {
+          "tier": "stored",
+          "email": null,
+          "detail": "empty",
+          "used_api_credit": false
+        },
+        {
+          "tier": "jd",
+          "email": null,
+          "detail": "no @ in description",
+          "used_api_credit": false
+        },
+        {
+          "tier": "scrape",
+          "email": null,
+          "detail": "tried 24 URLs, 0 emails",
+          "used_api_credit": false
+        },
+        {
+          "tier": "hunter",
+          "email": null,
+          "detail": "skip (no HUNTER_API_KEY)",
+          "used_api_credit": false
+        },
+        {
+          "tier": "guess",
+          "email": "careers@pwcaccelerationcenterindia.com",
+          "detail": "careers@slug.com (current fallback)",
+          "used_api_credit": false
+        }
+      ]
+    },
+    {
+      "job_id": 20,
+      "company": "Altera Digital Health",
+      "title": "Associate Database Administrator",
+      "score": 113.8,
+      "job_url": "https://www.linkedin.com/jobs/view/4431682650",
+      "stored_email": null,
+      "best": {
+        "tier": "guess",
+        "email": "careers@alteradigitalhealth.com",
+        "detail": "careers@slug.com (current fallback)",
+        "used_api_credit": false
+      },
+      "tiers": [
+        {
+          "tier": "stored",
+          "email": null,
+          "detail": "empty",
+          "used_api_credit": false
+        },
+        {
+          "tier": "jd",
+          "email": null,
+          "detail": "no @ in description",
+          "used_api_credit": false
+        },
+        {
+          "tier": "scrape",
+          "email": null,
+          "detail": "tried 24 URLs, 0 emails",
+          "used_api_credit": false
+        },
+        {
+          "tier": "hunter",
+          "email": null,
+          "detail": "skip (no HUNTER_API_KEY)",
+          "used_api_credit": false
+        },
+        {
+          "tier": "guess",
+          "email": "careers@alteradigitalhealth.com",
+          "detail": "careers@slug.com (current fallback)",
+          "used_api_credit": false
+        }
+      ]
+    },
+    {
+      "job_id": 21,
+      "company": "Harris Computer",
+      "title": "Associate Database Administrator",
+      "score": 113.8,
+      "job_url": "https://www.linkedin.com/jobs/view/4431703225",
+      "stored_email": null,
+      "best": {
+        "tier": "guess",
+        "email": "careers@harriscomputer.com",
+        "detail": "careers@slug.com (current fallback)",
+        "used_api_credit": false
+      },
+      "tiers": [
+        {
+          "tier": "stored",
+          "email": null,
+          "detail": "empty",
+          "used_api_credit": false
+        },
+        {
+          "tier": "jd",
+          "email": null,
+          "detail": "no @ in description",
+          "used_api_credit": false
+        },
+        {
+          "tier": "scrape",
+          "email": null,
+          "detail": "tried 24 URLs, 0 emails",
+          "used_api_credit": false
+        },
+        {
+          "tier": "hunter",
+          "email": null,
+          "detail": "skip (no HUNTER_API_KEY)",
+          "used_api_credit": false
+        },
+        {
+          "tier": "guess",
+          "email": "careers@harriscomputer.com",
+          "detail": "careers@slug.com (current fallback)",
+          "used_api_credit": false
+        }
+      ]
+    },
+    {
+      "job_id": 3,
+      "company": "TMUS Global Solutions",
+      "title": "Engineer, Software - SQL DBA [T500-27046]",
+      "score": 110.6,
+      "job_url": "https://www.linkedin.com/jobs/view/4433816971",
+      "stored_email": null,
+      "best": {
+        "tier": "guess",
+        "email": "careers@tmusglobalsolutions.com",
+        "detail": "careers@slug.com (current fallback)",
+        "used_api_credit": false
+      },
+      "tiers": [
+        {
+          "tier": "stored",
+          "email": null,
+          "detail": "empty",
+          "used_api_credit": false
+        },
+        {
+          "tier": "jd",
+          "email": null,
+          "detail": "no @ in description",
+          "used_api_credit": false
+        },
+        {
+          "tier": "scrape",
+          "email": null,
+          "detail": "tried 24 URLs, 0 emails",
+          "used_api_credit": false
+        },
+        {
+          "tier": "hunter",
+          "email": null,
+          "detail": "skip (no HUNTER_API_KEY)",
+          "used_api_credit": false
+        },
+        {
+          "tier": "guess",
+          "email": "careers@tmusglobalsolutions.com",
+          "detail": "careers@slug.com (current fallback)",
+          "used_api_credit": false
+        }
+      ]
+    },
+    {
+      "job_id": 6,
+      "company": "The Depository Trust & Clearing Corporation (DTCC)",
+      "title": "Software Engineering Associate - Snowflake",
+      "score": 110.0,
+      "job_url": "https://www.linkedin.com/jobs/view/4435851141",
+      "stored_email": null,
+      "best": {
+        "tier": "guess",
+        "email": "careers@thedepositorytrustclearingcorporationdtcc.com",
+        "detail": "careers@slug.com (current fallback)",
+        "used_api_credit": false
+      },
+      "tiers": [
+        {
+          "tier": "stored",
+          "email": null,
+          "detail": "empty",
+          "used_api_credit": false
+        },
+        {
+          "tier": "jd",
+          "email": null,
+          "detail": "no @ in description",
+          "used_api_credit": false
+        },
+        {
+          "tier": "scrape",
+          "email": null,
+          "detail": "tried 24 URLs, 0 emails",
+          "used_api_credit": false
+        },
+        {
+          "tier": "hunter",
+          "email": null,
+          "detail": "skip (no HUNTER_API_KEY)",
+          "used_api_credit": false
+        },
+        {
+          "tier": "guess",
+          "email": "careers@thedepositorytrustclearingcorporationdtcc.com",
+          "detail": "careers@slug.com (current fallback)",
+          "used_api_credit": false
+        }
+      ]
+    },
+    {
+      "job_id": 4,
+      "company": "HTC Global Services",
+      "title": "SQL/ETL Production Support Analyst",
+      "score": 109.7,
+      "job_url": "https://www.linkedin.com/jobs/view/4425128936",
+      "stored_email": null,
+      "best": {
+        "tier": "guess",
+        "email": "careers@htcglobalservices.com",
+        "detail": "careers@slug.com (current fallback)",
+        "used_api_credit": false
+      },
+      "tiers": [
+        {
+          "tier": "stored",
+          "email": null,
+          "detail": "empty",
+          "used_api_credit": false
+        },
+        {
+          "tier": "jd",
+          "email": null,
+          "detail": "no @ in description",
+          "used_api_credit": false
+        },
+        {
+          "tier": "scrape",
+          "email": null,
+          "detail": "tried 24 URLs, 0 emails",
+          "used_api_credit": false
+        },
+        {
+          "tier": "hunter",
+          "email": null,
+          "detail": "skip (no HUNTER_API_KEY)",
+          "used_api_credit": false
+        },
+        {
+          "tier": "guess",
+          "email": "careers@htcglobalservices.com",
+          "detail": "careers@slug.com (current fallback)",
+          "used_api_credit": false
+        }
+      ]
+    },
+    {
+      "job_id": 5,
+      "company": "Ideagen",
+      "title": "Technical Consultant (Backend Developer / Database Developer)",
+      "score": 106.9,
+      "job_url": "https://www.linkedin.com/jobs/view/4426986220",
+      "stored_email": null,
+      "best": {
+        "tier": "jd",
+        "email": "recruitment@ideagen.com",
+        "detail": "1 found in text",
+        "used_api_credit": false
+      },
+      "tiers": [
+        {
+          "tier": "stored",
+          "email": null,
+          "detail": "empty",
+          "used_api_credit": false
+        },
+        {
+          "tier": "jd",
+          "email": "recruitment@ideagen.com",
+          "detail": "1 found in text",
+          "used_api_credit": false
+        },
+        {
+          "tier": "scrape",
+          "email": null,
+          "detail": "tried 24 URLs, 0 emails",
+          "used_api_credit": false
+        },
+        {
+          "tier": "hunter",
+          "email": null,
+          "detail": "skip (no HUNTER_API_KEY)",
+          "used_api_credit": false
+        },
+        {
+          "tier": "guess",
+          "email": "careers@ideagen.com",
+          "detail": "careers@slug.com (current fallback)",
+          "used_api_credit": false
+        }
+      ]
+    }
+  ]
+}

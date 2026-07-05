@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% from "macros.html" import outreach_pill, track_pill %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Outreach</h2>
+    <p class="subtitle">Track emails, follow-ups, and outreach gaps</p>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi warning">
+    <div class="label">Due now</div>
+    <div class="value">{{ page_stats.due }}</div>
+    <div class="kpi-sub">follow-ups overdue</div>
+  </div>
+  <div class="kpi warning">
+    <div class="label">LinkedIn</div>
+    <div class="value">{{ page_stats.needs_contacts }}</div>
+    <div class="kpi-sub">find contacts</div>
+  </div>
+  <div class="kpi accent">
+    <div class="label">Pending</div>
+    <div class="value">{{ page_stats.pending }}</div>
+    <div class="kpi-sub">no email yet</div>
+  </div>
+  <div class="kpi success">
+    <div class="label">Emails sent</div>
+    <div class="value">{{ page_stats.sent }}</div>
+    <div class="kpi-sub">initial outreach</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Coverage</div>
+    <div class="value">{{ page_stats.coverage }}%</div>
+    <div class="kpi-sub">applied jobs emailed</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Applied, no email</div>
+    <div class="value">{{ page_stats.applied_gap }}</div>
+    <div class="kpi-sub">needs outreach</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Complete</div>
+    <div class="value">{{ page_stats.complete }}</div>
+    <div class="kpi-sub">follow-up sequence done</div>
+  </div>
+</div>
+
+<div class="info-banner">
+  <strong>Follow-up schedule:</strong>
+  {% for d in followup_days %}Day {{ d }}{% if not loop.last %} → {% endif %}{% endfor %}
+  <span class="muted">· Run daily pipeline with Gmail configured to send automatically</span>
+</div>
+
+<nav class="tab-bar">
+  <a href="{{ url_for('outreach_page', view='due', q=filters.q, track=filters.track) }}" class="tab {{ 'active' if view == 'due' else '' }}">
+    Due now {% if page_stats.due %}<span class="tab-count tab-urgent">{{ page_stats.due }}</span>{% endif %}
+  </a>
+  <a href="{{ url_for('outreach_page', view='needs_contacts', q=filters.q, track=filters.track) }}" class="tab {{ 'active' if view == 'needs_contacts' else '' }}">
+    LinkedIn <span class="tab-count tab-urgent">{{ page_stats.needs_contacts }}</span>
+  </a>
+  <a href="{{ url_for('outreach_page', view='pending', q=filters.q, track=filters.track) }}" class="tab {{ 'active' if view == 'pending' else '' }}">
+    Pending <span class="tab-count">{{ page_stats.pending }}</span>
+  </a>
+  <a href="{{ url_for('outreach_page', view='sent', q=filters.q, track=filters.track) }}" class="tab {{ 'active' if view == 'sent' else '' }}">
+    Sent <span class="tab-count">{{ page_stats.sent }}</span>
+  </a>
+  <a href="{{ url_for('outreach_page', view='applied_gap', q=filters.q, track=filters.track) }}" class="tab {{ 'active' if view == 'applied_gap' else '' }}">
+    Applied gap <span class="tab-count">{{ page_stats.applied_gap }}</span>
+  </a>
+  <a href="{{ url_for('outreach_page', view='complete', q=filters.q, track=filters.track) }}" class="tab {{ 'active' if view == 'complete' else '' }}">
+    Complete <span class="tab-count">{{ page_stats.complete }}</span>
+  </a>
+</nav>
+
+<form class="filters" method="get" action="{{ url_for('outreach_page') }}">
+  <input type="hidden" name="view" value="{{ view }}">
+  <input type="search" name="q" value="{{ filters.q or '' }}" placeholder="Search company or role…">
+  <select name="track">
+    <option value="">All tracks</option>
+    <option value="sql_dba" {{ 'selected' if filters.track == 'sql_dba' else '' }}>SQL / DBA</option>
+    <option value="python" {{ 'selected' if filters.track == 'python' else '' }}>Python</option>
+  </select>
+  <button type="submit" class="btn btn-primary">Filter</button>
+  <a class="btn btn-outline" href="{{ url_for('outreach_page', view=view) }}">Clear</a>
+</form>
+
+<div class="card">
+  <div class="card-header">
+    <h3>
+      {% if view == 'due' %}Follow-ups due now
+      {% elif view == 'pending' %}Awaiting first email
+      {% elif view == 'sent' %}Outreach sent
+      {% elif view == 'needs_contacts' %}Find contacts on LinkedIn
+      {% elif view == 'applied_gap' %}Applied without email
+      {% else %}Follow-up complete
+      {% endif %}
+    </h3>
+    <span class="chart-legend-note">{{ page_stats.showing }} showing</span>
+  </div>
+  <div class="card-body">
+    {% if jobs %}
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Role</th>
+            <th>Track</th>
+            <th>Status</th>
+            {% if view in ('due', 'sent', 'complete') %}<th>Timeline</th>{% endif %}
+            {% if view == 'applied_gap' %}<th>Applied</th>{% endif %}
+            <th>Score</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in jobs %}
+          <tr>
+            <td>
+              <a href="{{ url_for('job_detail', job_id=job.id) }}"><strong>{{ job.company }}</strong></a>
+              {% if job.contact_email %}<div class="cell-sub">{{ job.contact_email }}</div>{% endif %}
+            </td>
+            <td>{{ job.title }}</td>
+            <td>{{ track_pill(job.track) }}</td>
+            <td>{{ outreach_pill(job.outreach_status or 'pending') }}</td>
+            {% if view in ('due', 'sent', 'complete') %}
+            <td>
+              {% if job.initial_email_sent_at %}
+              <div class="cell-sub">Sent {{ job.initial_email_sent_at|fmt_date }}</div>
+              {% endif %}
+              {% if job.next_followup_at and view == 'due' %}
+              <div class="cell-sub cell-urgent">Due {{ job.next_followup_at|fmt_date }}</div>
+              {% elif job.followup_count %}
+              <div class="cell-sub">{{ job.followup_count }} follow-up(s)</div>
+              {% endif %}
+            </td>
+            {% endif %}
+            {% if view == 'applied_gap' %}
+            <td>{{ job.applied_at|days_ago }}</td>
+            {% endif %}
+            <td>{{ '%.1f'|format(job.score or 0) }}</td>
+            <td>
+              <div class="actions">
+                <a class="btn btn-outline" href="{{ url_for('outreach_preview', job_id=job.id) }}">Preview</a>
+                <a class="btn btn-outline" href="{{ url_for('job_detail', job_id=job.id) }}">Details</a>
+                <a class="btn btn-primary" href="{{ job.job_url }}" target="_blank" rel="noopener">Posting</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty">
+      {% if view == 'due' %}No follow-ups due — you're on track.
+      {% elif view == 'pending' %}No jobs waiting for auto-email with a verified address.
+      {% elif view == 'needs_contacts' %}No jobs need LinkedIn research right now.
+      {% elif view == 'applied_gap' %}Every applied job has outreach sent.
+      {% elif view == 'sent' %}No emails sent yet. Configure Gmail in .env and run the daily pipeline.
+      {% else %}No completed follow-up sequences yet.
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

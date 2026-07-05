@@ -1,0 +1,9 @@
+# Job Radar
+.venv/
+__pycache__/
+*.pyc
+.env
+data/tracker.db
+output/
+assets/*.pdf
+secrets/
